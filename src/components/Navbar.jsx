@@ -12,10 +12,13 @@ const LINKS = [
 ]
 
 export default function Navbar() {
-  const [scrolled, setScrolled]   = useState(false)
-  const [menuOpen, setMenuOpen]   = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [isAdminLogged, setIsAdminLogged] = useState(false)
+
   const location = useLocation()
 
+  // Detect scroll
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 55)
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -23,7 +26,15 @@ export default function Navbar() {
   }, [])
 
   // Close menu on route change
-  useEffect(() => { setMenuOpen(false) }, [location.pathname])
+  useEffect(() => { 
+    setMenuOpen(false) 
+  }, [location.pathname])
+
+  // ✅ Check admin session
+  useEffect(() => {
+    const adminSession = sessionStorage.getItem('admin_logged')
+    setIsAdminLogged(adminSession === 'true')
+  }, [location.pathname])
 
   return (
     <>
@@ -49,14 +60,28 @@ export default function Navbar() {
                   }
                 >
                   {label}
-                  {/* Active underline dot */}
                   <span className="nav__link-dot" />
                 </NavLink>
               </li>
             ))}
+
+            {/* ✅ Dashboard link يظهر فقط إذا الأدمن مسجل */}
+            {isAdminLogged && (
+              <li>
+                <NavLink
+                  to="/admin"
+                  className={({ isActive }) =>
+                    `nav__link${isActive ? ' nav__link--active' : ''}`
+                  }
+                >
+                  Dashboard
+                  <span className="nav__link-dot" />
+                </NavLink>
+              </li>
+            )}
           </ul>
 
-          {/* Right side: Services pill + hamburger */}
+          {/* Right side */}
           <div className="nav__right">
             <Link to="/contact" className="nav__cta">Book Now</Link>
             <button
@@ -70,7 +95,7 @@ export default function Navbar() {
         </div>
       </motion.nav>
 
-      {/* Mobile fullscreen menu */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -91,6 +116,19 @@ export default function Navbar() {
                   <Link to={to} className="nav__mobile-link">{label}</Link>
                 </motion.li>
               ))}
+
+              {/* ✅ Dashboard للموبايل */}
+              {isAdminLogged && (
+                <motion.li
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                >
+                  <Link to="/admin" className="nav__mobile-link">
+                    Dashboard
+                  </Link>
+                </motion.li>
+              )}
             </ul>
           </motion.div>
         )}

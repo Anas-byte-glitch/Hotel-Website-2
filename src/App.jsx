@@ -1,4 +1,4 @@
-// src/App.jsx
+// src/App.jsx  ── MODIFIED VERSION (add Admin route)
 import React, { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
@@ -9,8 +9,8 @@ import Home from './pages/Home'
 import OurHotel from './pages/OurHotel'
 import Rooms from './pages/Rooms'
 import Contact from './pages/Contact'
+import Admin from './pages/Admin'   // ← ADD THIS IMPORT
 
-// Lenis smooth scroll — initialised once at app root
 function SmoothScroll() {
   useEffect(() => {
     const lenis = new Lenis({
@@ -18,30 +18,45 @@ function SmoothScroll() {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smooth: true,
     })
-
-    function raf(time) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
-    }
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf) }
     requestAnimationFrame(raf)
-
     return () => lenis.destroy()
   }, [])
-
   return null
 }
 
-// Scroll to top on route change
 function ScrollReset() {
   const { pathname } = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
   return null
 }
 
-// Inner app has access to location for AnimatePresence
+// ── NEW: wrapper that hides Navbar/Footer on /admin ──
+function Layout() {
+  const { pathname } = useLocation()
+  const isAdmin = pathname.startsWith('/admin')
+
+  return (
+    <>
+      {!isAdmin && <Navbar />}
+      <main>
+        <AnimatePresence mode="wait">
+          <Routes location={useLocation()} key={useLocation().pathname}>
+            <Route path="/"          element={<Home />} />
+            <Route path="/our-hotel" element={<OurHotel />} />
+            <Route path="/rooms"     element={<Rooms />} />
+            <Route path="/contact"   element={<Contact />} />
+            <Route path="/admin"     element={<Admin />} />   {/* ← ADD THIS */}
+          </Routes>
+        </AnimatePresence>
+      </main>
+      {!isAdmin && <Footer />}
+    </>
+  )
+}
+
 function AnimatedRoutes() {
   const location = useLocation()
-
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
@@ -49,6 +64,7 @@ function AnimatedRoutes() {
         <Route path="/our-hotel" element={<OurHotel />} />
         <Route path="/rooms"     element={<Rooms />} />
         <Route path="/contact"   element={<Contact />} />
+        <Route path="/admin"     element={<Admin />} />   {/* ← ADD THIS */}
       </Routes>
     </AnimatePresence>
   )
@@ -59,11 +75,10 @@ export default function App() {
     <BrowserRouter>
       <SmoothScroll />
       <ScrollReset />
-      <Navbar />
-      <main>
-        <AnimatedRoutes />
-      </main>
-      <Footer />
+
+      {/* ✅ USE THIS */}
+      <Layout />
+
     </BrowserRouter>
   )
 }
