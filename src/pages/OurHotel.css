@@ -1,0 +1,120 @@
+/* src/pages/OurHotel.css */
+.ourhotel-hero { height: 84vh; }
+
+/* ── INTRO ── */
+.oh-intro__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 88px;
+  align-items: center;
+}
+
+.oh-intro__img { aspect-ratio: 4/3; }
+
+/* ── QUOTE ── */
+.oh-quote { text-align: center; }
+.oh-quote__text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.45rem, 2.6vw, 2.1rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1.55;
+  max-width: 820px;
+  margin: 0 auto;
+  border: none;
+}
+
+/* ── STORY ── */
+.oh-story__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 88px;
+  align-items: center;
+}
+.oh-story__img { aspect-ratio: 4/3; }
+
+/* ── AMENITIES ── */
+.oh-amenities__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+.amenity-card { overflow: hidden; }
+.amenity-card__img { aspect-ratio: 3/4; margin-bottom: 18px; }
+.amenity-card__title {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.amenity-card__desc {
+  font-size: 13.5px;
+  font-weight: 300;
+  color: var(--ink-light);
+  line-height: 1.7;
+}
+
+/* ── VISION ── */
+.oh-vision__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 88px;
+  align-items: center;
+}
+.oh-vision__img { aspect-ratio: 4/3; }
+
+/* ── CTA ── */
+.oh-cta {
+  position: relative;
+  height: 68vh;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.oh-cta__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+.oh-cta__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.52);
+}
+.oh-cta__inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 40px;
+}
+.oh-cta__title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 300;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+.oh-cta__sub {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.78);
+  margin-bottom: 36px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .oh-amenities__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .oh-intro__grid,
+  .oh-story__grid,
+  .oh-vision__grid { grid-template-columns: 1fr; gap: 44px; }
+  .oh-amenities__grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
+}
